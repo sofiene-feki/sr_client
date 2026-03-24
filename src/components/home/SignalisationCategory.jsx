@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { TiArrowRightThick, TiArrowLeftThick } from "react-icons/ti";
 import { getEcwidCategories, slugify } from "../../functions/ecwid";
 import chantier from "../../assets/chantier.png";
 
@@ -16,15 +17,13 @@ const NextArrow = (props) => {
   const { onClick } = props;
   return (
     <div
-      className="absolute -right-4 md:-right-8 top-1/2 -translate-y-1/2 z-10 cursor-pointer transition-all duration-300 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center hover:scale-110 drop-shadow-lg group"
+      className="absolute right-0 md:-right-6 lg:-right-12 top-1/2 -translate-y-1/2 z-10 cursor-pointer transition-all duration-300 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center hover:scale-110 drop-shadow-lg group"
       onClick={onClick}
       title="Suivant"
     >
       {/* Outer ring simulates the metal sign border */}
-      <div className="w-full h-full rounded-full bg-black flex items-center justify-center border-[3px] border-[#fff] shadow-[0_0_0_1.5px_black] relative group-hover:bg-neutral-800 transition-colors">
-        <svg viewBox="0 0 100 100" className="w-8 h-8 md:w-10 md:h-10 ml-1 relative z-10" fill="white" stroke="white" strokeWidth="8" strokeLinejoin="round" strokeLinecap="round">
-          <path d="M 18 40 L 54 40 L 60 22 L 88 50 L 60 78 L 54 60 L 18 60 Z" />
-        </svg>
+      <div className="w-full h-full rounded-full bg-pmc-blue flex items-center justify-center border-[3px] border-[#fff] shadow-[0_0_0_1.5px_#264796] relative group-hover:opacity-80 transition-all">
+        <TiArrowRightThick className="w-6 h-6 md:w-8 md:h-8 text-white relative z-10" />
       </div>
     </div>
   );
@@ -34,14 +33,12 @@ const PrevArrow = (props) => {
   const { onClick } = props;
   return (
     <div
-      className="absolute -left-4 md:-left-8 top-1/2 -translate-y-1/2 z-10 cursor-pointer transition-all duration-300 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center hover:scale-110 drop-shadow-lg group"
+      className="absolute left-0 md:-left-6 lg:-left-12 top-1/2 -translate-y-1/2 z-10 cursor-pointer transition-all duration-300 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center hover:scale-110 drop-shadow-lg group"
       onClick={onClick}
       title="Précédent"
     >
-      <div className="w-full h-full rounded-full bg-black flex items-center justify-center border-[3px] border-[#fff] shadow-[0_0_0_1.5px_black] relative group-hover:bg-neutral-800 transition-colors">
-        <svg viewBox="0 0 100 100" className="w-8 h-8 md:w-10 md:h-10 mr-1 relative z-10" fill="white" stroke="white" strokeWidth="8" strokeLinejoin="round" strokeLinecap="round">
-          <path d="M 82 40 L 46 40 L 40 22 L 12 50 L 40 78 L 46 60 L 82 60 Z" />
-        </svg>
+      <div className="w-full h-full rounded-full bg-pmc-blue flex items-center justify-center border-[3px] border-[#fff] shadow-[0_0_0_1.5px_#264796] relative group-hover:opacity-80 transition-all">
+        <TiArrowLeftThick className="w-6 h-6 md:w-8 md:h-8 text-white relative z-10" />
       </div>
     </div>
   );
@@ -89,12 +86,12 @@ export default function SignalisationCategory() {
   }, []);
 
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: isMobile ? categories.length > 1 : categories.length > 4,
     speed: 600,
-    slidesToShow: isMobile ? 1 : Math.min(4, Math.max(1, categories.length)),
+    slidesToShow: isMobile ? 1.5 : Math.min(4, Math.max(1, categories.length)),
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: !isMobile,
     autoplaySpeed: 4000,
     arrows: !isMobile,
     nextArrow: !isMobile ? <NextArrow /> : undefined,
@@ -110,16 +107,19 @@ export default function SignalisationCategory() {
       {
         breakpoint: 640,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 1.5,
           infinite: categories.length > 1,
+          dots: false,
+          autoplay: false,
+          arrows: false
         },
       },
     ],
   };
 
   return (
-    <section className="py-24 bg-white overflow-hidden">
-      <div className="max-w-full mx-auto px-6 relative">
+    <section className="py-12 bg-white overflow-hidden">
+      <div className="max-w-[1400px] mx-auto px-2 md:px-4 lg:px-14 relative">
         <div className="text-center mb-16 space-y-4">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -171,7 +171,7 @@ export default function SignalisationCategory() {
                     </div>
 
                     <div className="p-8 flex-1 flex flex-col relative bg-white">
-                      <h3 className="text-xl md:text-2xl font-black text-black mb-3 group-hover:text-neutral-600 transition-colors line-clamp-2 uppercase tracking-wide">
+                      <h3 className="text-md md:text-xl  text-black mb-3 group-hover:text-neutral-600 transition-colors line-clamp-2 uppercase tracking-wide">
                         {cat.name}
                       </h3>
                       {/* {cat.description ? (

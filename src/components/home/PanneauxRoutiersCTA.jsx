@@ -75,7 +75,7 @@ export default function PanneauxRoutiersCTA() {
               className="relative flex items-center justify-center w-full max-w-[420px] h-[64px] md:h-[72px] bg-white border-2 border-gray-100 group hover:-translate-y-1 transition-all duration-300 cursor-pointer rounded-lg shadow-xl p-1"
             >
               <span
-                className="flex items-center justify-center w-full h-full font-bold text-[18px] md:text-[21px] tracking-[0.02em] md:tracking-[0.04em] text-black border-[3px] md:border-4 border-black rounded-[4px] pt-[2px]"
+                className="flex items-center justify-center w-full h-full font-bold text-[16px] md:text-[21px] tracking-[0.02em] md:tracking-[0.04em] text-black border-[3px] md:border-4 border-black rounded-[4px] pt-[2px]"
                 style={{ fontFamily: "'Inter', Arial, sans-serif" }}
               >
                 VOIR TOUS LES PANNEAUX <TiArrowRightThick className="ml-2 w-10 h-10" />

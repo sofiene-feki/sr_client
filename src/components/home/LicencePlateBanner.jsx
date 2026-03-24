@@ -2,79 +2,91 @@ import React from "react";
 import { motion } from "framer-motion";
 import hero from "../../assets/hero.png";
 import pmcLogo from "../../assets/pmcLogo.png";
-import { Link } from "react-router-dom";
+import { FiTruck, FiMapPin, FiShield } from "react-icons/fi";
 
 export default function LicencePlateBanner({ title, subtitle, triggerRef }) {
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-white/50">
-      <section className="relative max-w-7xl mx-auto w-full min-h-auto flex flex-col md:flex-row overflow-hidden bg-white rounded-[2rem] border border-neutral-200 shadow-md transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,18,51,0.08)]">
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-4 md:py-6 bg-white">
+      <section className="relative max-w-7xl mx-auto w-full flex flex-col md:flex-row overflow-hidden bg-white rounded-2xl shadow-lg border border-neutral-200 group">
+
         {/* Visual Side */}
-        <div className="relative md:w-2/4 w-full h-auto flex items-center justify-center p-6 md:p-8 bg-white overflow-hidden">
+        <div className="relative w-full md:w-[630px] h-[482px] md:h-auto shrink-0 overflow-hidden bg-neutral-100">
           <motion.img
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 1.05 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             src={hero}
-            alt="Plaque immatriculation Luxembourg"
-            className="w-full h-auto object-contain"
+            alt="Plaques d'immatriculation"
+            className="absolute inset-0 w-full h-full object-cover z-10"
           />
         </div>
 
         {/* Content Side */}
-        <div className="md:w-2/4 w-full flex items-center justify-center p-6 md:p-12 z-10 bg-white">
+        <div className="flex-1 flex flex-col justify-center p-5 md:p-6 lg:p-8 z-10 bg-white relative">
+
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
-            className="flex flex-col items-start text-left"
+            className="flex flex-col items-start text-left relative z-20"
           >
-            <div className="flex items-center gap-4 mb-6">
-              <img src={pmcLogo} alt="PMC Logo" className="h-10 w-auto object-contain" />
+            {/* Header row with Logo and Tagline */}
+            <div className="flex justify-between items-center w-full mb-2">
+              <span className="px-2 py-0.5 bg-[#f2b823]/20 text-[#001233] text-[9px] sm:text-[10px] font-black uppercase tracking-[0.1em] rounded border border-[#f2b823]/40">
+                Plaques Moins Chères
+              </span>
+              <img src={pmcLogo} alt="PMC Logo" className="w-20 md:w-24 h-auto object-contain" />
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-black text-pmc-blue mb-6 leading-tight tracking-tight">
-              Plaques d'immatriculation <br />
-              <span className="text-pmc-red">Premium</span>
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-[#001233] mb-2 leading-[1.15] tracking-tight font-heading">
+              Besoin d’une plaque d’immatriculation auto <br className="hidden md:block" />
+              <span className="text-[#f2b823]">homologuée ?</span>
             </h2>
 
-            <p className="text-base md:text-lg text-neutral-600 mb-8 leading-relaxed font-light">
-              Commandez maintenant vos plaques d’immatriculation sécurisées.
-              <strong className="font-semibold text-pmc-blue"> La meilleure qualité</strong> et les prix les plus compétitifs au Luxembourg, produites et expédiées le jour même.
+            <p className="text-[13px] md:text-sm text-neutral-600 mb-4 leading-relaxed font-light max-w-xl">
+              Commandez vos plaques d’immatriculation AUTO ST-1, moto, scooter et accessoires pour la fixation de vos plaques d’immatriculation et plus.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 w-full relative z-20">
+            {/* Compact Custom CTA Button answering the explicit question */}
+            <div className="flex w-full justify-start">
               <a
                 href="https://dev-env-pmc.netlify.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 bg-pmc-blue hover:bg-pmc-red text-white font-bold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl shadow-pmc-blue/20 text-center tracking-wide block uppercase text-sm"
+                className="relative flex items-center justify-center w-full max-w-[300px] h-[46px] md:h-[50px] bg-[#001233] hover:bg-black transition-colors duration-300 cursor-pointer rounded-lg shadow-md p-1 group"
               >
-                Commander sur notre site dédié
+                <span
+                  className="relative flex items-center justify-center w-full h-full font-bold text-[12px] md:text-[13px] tracking-[0.05em] text-[#f2b823] border-[1.5px] border-[#f2b823]/20 rounded z-10"
+                  style={{ fontFamily: "'Inter', Arial, sans-serif" }}
+                >
+                  Commander maintenant
+                  <svg className="ml-2 w-4 h-4 text-[#f2b823] group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </span>
               </a>
             </div>
 
-            <div className="mt-8 flex items-center space-x-4">
-              <div className="flex -space-x-2">
-                {[1, 2, 3, 4].map((i) => (
-                  <img
-                    key={i}
-                    src={`https://randomuser.me/api/portraits/thumb/men/${i + 20}.jpg`}
-                    className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
-                    alt="Client satisfait"
-                  />
-                ))}
+            {/* Features below CTA */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-5 mt-4 space-y-2 sm:space-y-0 text-[12px] md:text-[13px] font-medium text-neutral-600 pt-1">
+              <div className="flex items-center space-x-2">
+                <FiTruck className="text-[#f2b823] w-4 h-4 shrink-0" />
+                <span>Expédition sous 48 heures</span>
               </div>
-              <p className="text-[11px] text-neutral-500 font-bold uppercase tracking-wider">
-                +20,000 clients satisfaits
-              </p>
+              <div className="flex flex-row items-center space-x-2">
+                <FiMapPin className="text-[#f2b823] w-4 h-4 shrink-0" />
+                <span>Retrait gratuit</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <FiShield className="text-[#f2b823] w-4 h-4 shrink-0" />
+                <span>SNCA agréé</span>
+              </div>
             </div>
+
           </motion.div>
         </div>
-
-        {/* Background decoration */}
-        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-pmc-red/5 rounded-full blur-3xl pointer-events-none" />
       </section>
     </div>
   );
