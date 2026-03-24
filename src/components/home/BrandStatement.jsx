@@ -92,7 +92,7 @@ export default function BrandStatement() {
               animate={inView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ delay: 1.2, duration: 1 }}
             >
-              Votre partenaire de confiance pour la conception, la création sur-mesure et l'installation de <strong className="font-medium text-black">panneaux de signalisation</strong>, de systèmes de <strong className="font-medium text-black">balisage de sécurité</strong>, de <strong className="font-medium text-black">mobilier urbain</strong> et de <strong className="font-medium text-black">marquage au sol</strong>.
+              Votre partenaire de confiance pour la conception, la création sur-mesure et l'installation de <strong className="font-medium ">panneaux de signalisation</strong>, de systèmes de <strong className="font-medium ">balisage de sécurité</strong>, de <strong className="font-medium ">mobilier urbain</strong> et de <strong className="font-medium ">marquage au sol</strong>.
             </motion.p>
           </div>
 

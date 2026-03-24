@@ -50,6 +50,13 @@ const PrevArrow = (props) => {
 export default function SignalisationCategory() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -83,14 +90,15 @@ export default function SignalisationCategory() {
 
   const sliderSettings = {
     dots: true,
-    infinite: categories.length > 4,
+    infinite: isMobile ? categories.length > 1 : categories.length > 4,
     speed: 600,
-    slidesToShow: Math.min(4, Math.max(1, categories.length)),
+    slidesToShow: isMobile ? 1 : Math.min(4, Math.max(1, categories.length)),
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 4000,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
+    arrows: !isMobile,
+    nextArrow: !isMobile ? <NextArrow /> : undefined,
+    prevArrow: !isMobile ? <PrevArrow /> : undefined,
     responsive: [
       {
         breakpoint: 1024,
@@ -110,7 +118,7 @@ export default function SignalisationCategory() {
   };
 
   return (
-    <section className="py-24 bg-neutral-50/50 overflow-hidden">
+    <section className="py-24 bg-white overflow-hidden">
       <div className="max-w-full mx-auto px-6 relative">
         <div className="text-center mb-16 space-y-4">
           <motion.h2
@@ -143,9 +151,9 @@ export default function SignalisationCategory() {
                 <div key={cat.id} className="p-4 outline-none">
                   <Link
                     to={`/boutique/signalisation/${slugify(cat.name)}`}
-                    className="block bg-white rounded-[32px] border border-neutral-100 overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-black/10 transition-all duration-500 flex flex-col group min-h-[420px]"
+                    className="block bg-white border border-neutral-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-neutral-300 transition-all duration-500 flex flex-col group min-h-[420px] rounded-lg"
                   >
-                    <div className="h-56 overflow-hidden bg-neutral-50/50 relative flex items-center justify-center ">
+                    <div className="h-56 overflow-hidden bg-white border-b border-neutral-100 relative flex items-center justify-center ">
                       {/* Subdued background shape effect */}
                       <div className="absolute inset-0 bg-gray-200/50 scale-0 group-hover:scale-100 transition-transform duration-700 rounded-full blur-3xl"></div>
 
@@ -162,11 +170,11 @@ export default function SignalisationCategory() {
                       )}
                     </div>
 
-                    <div className="p-8 flex-1 flex flex-col border-t border-neutral-50 relative bg-white">
-                      <h3 className="text-xl md:text-2xl font-black text-black mb-3 group-hover:text-gray-600 transition-colors line-clamp-2 uppercase tracking-wide">
+                    <div className="p-8 flex-1 flex flex-col relative bg-white">
+                      <h3 className="text-xl md:text-2xl font-black text-black mb-3 group-hover:text-neutral-600 transition-colors line-clamp-2 uppercase tracking-wide">
                         {cat.name}
                       </h3>
-                      {cat.description ? (
+                      {/* {cat.description ? (
                         <p className="text-gray-500 text-sm line-clamp-3 mb-6 leading-relaxed font-light">
                           {getPlainText(cat.description)}
                         </p>
@@ -174,7 +182,7 @@ export default function SignalisationCategory() {
                         <p className="text-gray-500 text-sm line-clamp-3 mb-6 leading-relaxed font-light">
                           Découvrez notre catalogue de {cat.name.toLowerCase()} disponible immédiatement en livraison.
                         </p>
-                      )}
+                      )} */}
 
                       <div className="mt-auto pt-4">
                         <div className="flex items-center gap-3 text-sm font-bold text-black uppercase tracking-widest group-hover:gap-4 transition-all">
