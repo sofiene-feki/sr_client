@@ -89,7 +89,7 @@ export default function SignalisationCategory() {
     dots: false,
     infinite: isMobile ? categories.length > 1 : categories.length > 4,
     speed: 600,
-    slidesToShow: isMobile ? 1.2 : Math.min(4, Math.max(1, categories.length)),
+    slidesToShow: isMobile ? 1.5 : Math.min(4, Math.max(1, categories.length)),
     slidesToScroll: 1,
     autoplay: !isMobile,
     autoplaySpeed: 4000,
@@ -128,8 +128,8 @@ export default function SignalisationCategory() {
             <div className="w-12 h-12 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : categories.length > 0 ? (
-          <div className="category-slider-container   relative z-0">
-            <Slider {...sliderSettings} className="pb-12 px-4">
+          <div className="category-slider-container   relative z-0" dir="rtl">
+            <Slider {...sliderSettings} className="pb-12 px-4" dir="rtl">
               {categories.map((cat) => (
                 <div key={cat.id} className="p-4 outline-none ">
                   <Link

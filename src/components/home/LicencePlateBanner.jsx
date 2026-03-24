@@ -10,7 +10,7 @@ export default function LicencePlateBanner({ title, subtitle, triggerRef }) {
       <section className="relative max-w-7xl mx-auto w-full flex flex-col md:flex-row overflow-hidden bg-white rounded-2xl shadow-lg border border-neutral-200 group">
 
         {/* Visual Side */}
-        <div className="relative w-full md:w-[630px] h-[482px] md:h-auto shrink-0 overflow-hidden bg-neutral-100">
+        <div className="relative w-full md:w-[630px] h-[232px] md:h-auto shrink-0 overflow-hidden bg-neutral-100">
           <motion.img
             initial={{ opacity: 0, scale: 1.05 }}
             whileInView={{ opacity: 1, scale: 1 }}
