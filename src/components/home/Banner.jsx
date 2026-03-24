@@ -170,7 +170,7 @@ export default function Banner() {
             : slides.map((slide, index) => (
               <div
                 key={index}
-                className="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[2.5/1] overflow-hidden bg-neutral-900"
+                className="relative w-full aspect-auto sm:aspect-[16/9] lg:aspect-[2.5/1] overflow-hidden "
               >
                 <img
                   src={slide.img}

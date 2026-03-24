@@ -52,81 +52,104 @@ const addresses = [
 
 export default function AddressCards() {
   return (
-    <section className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16 space-y-4">
-          <h2 className="text-4xl font-black text-neutral-900 tracking-tight">
-            Nos <span className="text-pmc-yellow">Points de Retrait</span>
-          </h2>
-          <p className="text-lg text-neutral-500 max-w-2xl mx-auto font-light">
+    <section className="py-24 bg-white relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+
+        <div className="text-center mb-16 space-y-4 flex flex-col items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center space-x-3 md:space-x-4 px-4 py-1.5 md:py-2 rounded-full bg-white border-2 border-neutral-100 shadow-sm mb-4"
+          >
+            <span className="text-[10px] md:text-[11px] font-black tracking-[0.25em] text-neutral-800 uppercase pt-[2px]">
+              Nos Boutiques
+            </span>
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl font-black text-black mb-6 leading-tight tracking-tight uppercase font-heading"
+          >
+            Points de <span className="text-[#001233]">Retrait</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-base md:text-lg text-gray-500 mb-8 leading-relaxed font-light max-w-xl mx-auto"
+          >
             Retrait gratuit dans toutes nos boutiques au Luxembourg. Choisissez
             le point le plus proche de chez vous.
-          </p>
+          </motion.p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {addresses.map((addr, index) => (
-            <div
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
               key={index}
-              className="group flex flex-col bg-white rounded-md border border-neutral-100 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden"
+              className="group relative bg-white border border-neutral-200 shadow-md p-0 rounded-2xl hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 flex flex-col overflow-hidden h-full"
             >
               {/* IMAGE CONTAINER */}
-              <div className="relative h-auto overflow-hidden bg-neutral-50">
+              <div className="relative h-42  overflow-hidden bg-neutral-100 flex items-center justify-center border-b border-neutral-100">
                 <img
                   src={addr.image}
                   alt={addr.title}
-                  className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
 
-                {/* MAP OVERLAY */}
-                <div className="absolute bottom-4 right-4 w-32 h-20 rounded-md overflow-hidden shadow-2xl border-2 border-white opacity-0 group-hover:opacity-100 transition-all duration-500">
+                {/* SMALL MAP OVERLAY (ALWAYS DISPLAYED) */}
+                <div className="absolute bottom-3 right-3 w-[84px] h-[64px] bg-white rounded-lg overflow-hidden shadow-lg border-[3px] border-white transition-transform duration-300 z-20 hover:scale-110 cursor-pointer">
                   <iframe
-                    title={`Map of ${addr.title}`}
+                    title={`Carte de retrait ${addr.title}`}
                     src={addr.map}
-                    className="w-full h-full grayscale hover:grayscale-0 transition-all duration-300"
+                    className="w-full h-full object-cover"
                     loading="lazy"
                   />
                 </div>
               </div>
 
               {/* INFO */}
-              <div className="p-6 flex-1 flex flex-col">
-                <h3 className="text-xl font-bold text-neutral-900 mb-4 group-hover:text-pmc-yellow transition-colors">
+              <div className="p-6 md:p-8 flex-1 flex flex-col bg-white">
+                <h3 className="text-lg md:text-xl font-semibold text-[#001233] tracking-wide uppercase mb-6 group-hover:text-[#f2b823] transition-colors">
                   {addr.title}
                 </h3>
 
-                <div className="space-y-3 flex-1">
+                <div className="space-y-4 flex-1">
                   <div className="flex items-start text-sm text-neutral-600 space-x-3">
-                    <PiMapPinLine className="text-xl text-pmc-yellow flex-shrink-0" />
-                    <span>{addr.address}</span>
+                    <PiMapPinLine className="text-xl text-[#001233] flex-shrink-0 mt-0.5" />
+                    <span className=" text-black leading-snug">{addr.address}</span>
                   </div>
 
                   <div className="flex items-center text-sm text-neutral-600 space-x-3">
-                    <PiPhoneCallThin className="text-xl text-pmc-yellow flex-shrink-0" />
-                    <span className="font-medium">{addr.phone}</span>
+                    <PiPhoneCallThin className="text-xl text-[#001233] flex-shrink-0" />
+                    <span className="font-medium text-neutral-800">{addr.phone}</span>
                   </div>
 
                   <div className="flex items-center text-sm text-neutral-600 space-x-3">
-                    <TfiEmail className="text-xl text-pmc-yellow flex-shrink-0" />
-                    <span>{addr.email}</span>
+                    <TfiEmail className="text-xl text-[#001233] flex-shrink-0" />
+                    <span className="text-neutral-700">{addr.email}</span>
                   </div>
 
-                  <div className="flex items-start text-sm text-neutral-600 space-x-3 pt-2">
-                    <PiClockCountdownLight className="text-xl text-neutral-400 flex-shrink-0" />
-                    <span className="text-xs leading-relaxed">
+                  <div className="flex items-start text-sm text-neutral-500 space-x-3 pt-3 border-t border-neutral-50">
+                    <PiClockCountdownLight className="text-xl text-[#f2b823] flex-shrink-0 mt-0.5" />
+                    <span className="text-[12px] leading-relaxed font-semibold">
                       {addr.hours}
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-neutral-50">
-                  <button className="w-full py-3 text-xs font-bold tracking-widest uppercase bg-pmc-blue text-white rounded-md hover:bg-pmc-yellow hover:text-pmc-blue transition-colors">
-                    Itinéraire
-                  </button>
-                </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

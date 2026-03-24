@@ -89,32 +89,15 @@ export default function SignalisationCategory() {
     dots: false,
     infinite: isMobile ? categories.length > 1 : categories.length > 4,
     speed: 600,
-    slidesToShow: isMobile ? 1.5 : Math.min(4, Math.max(1, categories.length)),
+    slidesToShow: isMobile ? 1.2 : Math.min(4, Math.max(1, categories.length)),
     slidesToScroll: 1,
     autoplay: !isMobile,
     autoplaySpeed: 4000,
     arrows: !isMobile,
     nextArrow: !isMobile ? <NextArrow /> : undefined,
     prevArrow: !isMobile ? <PrevArrow /> : undefined,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: Math.min(2, Math.max(1, categories.length)),
-          infinite: categories.length > 2,
-        },
-      },
-      {
-        breakpoint: 640,
-        settings: {
-          slidesToShow: 1.5,
-          infinite: categories.length > 1,
-          dots: false,
-          autoplay: false,
-          arrows: false
-        },
-      },
-    ],
+    swipeToSlide: true,
+    centerMode: false,
   };
 
   return (
@@ -145,10 +128,10 @@ export default function SignalisationCategory() {
             <div className="w-12 h-12 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : categories.length > 0 ? (
-          <div className="category-slider-container -mx-4 relative z-0">
+          <div className="category-slider-container   relative z-0">
             <Slider {...sliderSettings} className="pb-12 px-4">
               {categories.map((cat) => (
-                <div key={cat.id} className="p-4 outline-none">
+                <div key={cat.id} className="p-4 outline-none ">
                   <Link
                     to={`/boutique/signalisation/${slugify(cat.name)}`}
                     className="block bg-white border border-neutral-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-neutral-300 transition-all duration-500 flex flex-col group min-h-[420px] rounded-lg"
@@ -171,7 +154,7 @@ export default function SignalisationCategory() {
                     </div>
 
                     <div className="p-8 flex-1 flex flex-col relative bg-white">
-                      <h3 className="text-md md:text-xl  text-black mb-3 group-hover:text-neutral-600 transition-colors line-clamp-2 uppercase tracking-wide">
+                      <h3 className="text-md md:text-xl font-semibold text-black mb-3 group-hover:text-neutral-600 transition-colors line-clamp-2 uppercase tracking-wide">
                         {cat.name}
                       </h3>
                       {/* {cat.description ? (
@@ -184,7 +167,7 @@ export default function SignalisationCategory() {
                         </p>
                       )} */}
 
-                      <div className="mt-auto pt-4">
+                      <div className="mt-auto">
                         <div className="flex items-center gap-3 text-sm font-bold text-black uppercase tracking-widest group-hover:gap-4 transition-all">
                           <span>Explorer</span>
                           <span className="text-xl">→</span>
