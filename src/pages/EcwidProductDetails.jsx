@@ -21,6 +21,7 @@ const EcwidProductDetails = () => {
     const [selectedImage, setSelectedImage] = useState("");
     const [plateNumber, setPlateNumber] = useState("");
     const [quantity, setQuantity] = useState(1);
+    const [selectedOptions, setSelectedOptions] = useState({});
 
     const isPlaque = product?.categoryIds?.includes(124206781) ||
         product?.categories?.some(c => c.id === 124206781) ||
@@ -30,6 +31,55 @@ const EcwidProductDetails = () => {
     useEffect(() => {
         if (id) fetchProduct();
     }, [id]);
+
+    useEffect(() => {
+        if (product?.options) {
+            const initial = {};
+            product.options.forEach(opt => {
+                if (opt.choices && opt.choices.length > 0) {
+                    const def = opt.choices.find(c => c.isDefault) || opt.choices[0];
+                    initial[opt.name] = def.text;
+                }
+            });
+            setSelectedOptions(initial);
+        }
+    }, [product]);
+
+    const calculatePrice = () => {
+        if (!product) return 0;
+        let base = product.price || 0;
+
+        if (product.options) {
+            product.options.forEach(opt => {
+                const selectedText = selectedOptions[opt.name];
+                if (selectedText) {
+                    const choice = opt.choices?.find(c => c.text === selectedText);
+                    if (choice && choice.priceModifier) {
+                        if (choice.priceModifierType === "PERCENT") {
+                            base += product.price * (choice.priceModifier / 100);
+                        } else {
+                            base += choice.priceModifier;
+                        }
+                    }
+                }
+            });
+        }
+        return base;
+    };
+
+    const getPriceDisplay = () => {
+        const currentPrice = calculatePrice();
+        if (product?.defaultDisplayedPriceFormatted) {
+            const currencyMatch = product.defaultDisplayedPriceFormatted.match(/[^0-9.,\s-]+/);
+            const currency = currencyMatch ? currencyMatch[0] : "€";
+            if (product.defaultDisplayedPriceFormatted.startsWith(currency)) {
+                return `${currency}${currentPrice.toFixed(2)}`;
+            } else {
+                return `${currentPrice.toFixed(2)} ${currency}`;
+            }
+        }
+        return `${currentPrice.toFixed(2)} €`;
+    };
 
     const fetchProduct = async () => {
         setLoading(true);
@@ -80,7 +130,7 @@ const EcwidProductDetails = () => {
     const handleAddToCart = () => {
         if (!product) return;
         const numericId = Number(product.id);
-        const addOptions = {};
+        const addOptions = { ...selectedOptions };
         if (isPlaque && plateNumber) {
             addOptions["Numéro de plaque"] = plateNumber;
         }
@@ -108,7 +158,7 @@ const EcwidProductDetails = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="min-h-screen flex items-center justify-center bg-neutral-50">
                 <div className="h-12 w-12 border-4 border-pmc-yellow border-t-transparent rounded-full animate-spin"></div>
             </div>
         );
@@ -116,9 +166,9 @@ const EcwidProductDetails = () => {
 
     if (!product) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Produit non trouvé</h2>
-                <button onClick={() => navigate("/boutique")} className="text-pmc-yellow font-bold flex items-center gap-2">
+            <div className="min-h-screen flex flex-col items-center justify-center bg-neutral-50">
+                <h2 className="text-2xl font-bold text-black mb-4 uppercase font-heading tracking-tight">Produit non trouvé</h2>
+                <button onClick={() => navigate("/boutique")} className="text-pmc-yellow font-bold flex items-center gap-2 hover:underline">
                     <FaArrowLeft /> Retour à la boutique
                 </button>
             </div>
@@ -126,7 +176,7 @@ const EcwidProductDetails = () => {
     }
 
     return (
-        <main className="bg-gray-50 min-h-screen pt-28 pb-20">
+        <main className="bg-neutral-50 min-h-screen pt-28 pb-20">
             {product && (
                 <SEO
                     title={product.name}
@@ -139,130 +189,146 @@ const EcwidProductDetails = () => {
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <button
                     onClick={() => navigate(-1)}
-                    className="mb-8 flex items-center gap-2 text-gray-500 hover:text-pmc-yellow transition-colors font-medium"
+                    className="mb-6 flex items-center gap-2 text-neutral-500 hover:text-black transition-colors font-medium"
                 >
                     <FaArrowLeft size={14} /> Retour
                 </button>
 
-                <div className="lg:grid lg:grid-cols-2 lg:gap-x-12">
-                    {/* LEFT Column: Gallery or License Plate */}
-                    <div className="flex flex-col gap-4">
-                        {isPlaque ? (
-                            <LicensePlateInput
-                                value={plateNumber}
-                                onChange={setPlateNumber}
-                                type={detectPlateType(product.name)}
-                                combinations={(() => {
-                                    if (!product?.description) return null;
-                                    // Robust regex for splitting combinations section
-                                    const startRegex = /(?:COMBINAISONS?\s+(?:DISPONIBLES|POSSIBLES)|POSSIBLE\s+COMBINATIONS?)\s*[:\-]?/i;
-                                    const parts = product.description.split(startRegex);
+                <div className="relative w-full min-h-auto flex flex-col md:flex-row bg-white shadow-md border border-neutral-200">
+                    {/* Visual Side */}
+                    <div className="relative md:w-1/2 w-full border-b md:border-b-0 md:border-r border-neutral-100 bg-white">
+                        <div className="sticky top-32 p-6 md:p-8 lg:p-10 flex flex-col items-center justify-center">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="w-full flex justify-center items-center"
+                            >
+                                <img
+                                    src={selectedImage}
+                                    alt={product.name}
+                                    className="w-full h-auto object-contain max-h-[400px] md:max-h-[500px]"
+                                />
+                            </motion.div>
 
-                                    if (parts.length > 1) {
-                                        // End split at common warning headers
-                                        const endRegex = /(?:AVANT DE PASSER|<u>AVANT DE PASSER|ATTENTION|PLEASE NOTE)/i;
-                                        return parts[1].split(endRegex)[0].trim();
-                                    }
-                                    return null;
-                                })()}
-                            />
-                        ) : (
-                            <>
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    className="aspect-square bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100"
-                                >
-                                    <img
-                                        src={selectedImage}
-                                        alt={product.name}
-                                        className="w-full h-full object-contain p-8"
-                                    />
-                                </motion.div>
-
-                                {product.media && product.media.images && product.media.images.length > 1 && (
-                                    <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-                                        {product.media.images.map((img, idx) => (
-                                            <button
-                                                key={idx}
-                                                onClick={() => setSelectedImage(img.image1500pxUrl || img.imageUrl)}
-                                                className={`flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden border-2 transition-all ${selectedImage === (img.image1500pxUrl || img.imageUrl)
-                                                    ? "border-pmc-yellow shadow-md"
-                                                    : "border-transparent bg-white hover:border-gray-200"
-                                                    }`}
-                                            >
-                                                <img src={img.thumbnailUrl} alt="" className="w-full h-full object-cover" />
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-                            </>
-                        )}
+                            {!isPlaque && product.media && product.media.images && product.media.images.length > 1 && (
+                                <div className="flex gap-3 overflow-x-auto mt-6 pb-2 scrollbar-hide px-2 max-w-full">
+                                    {product.media.images.map((img, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() => setSelectedImage(img.image1500pxUrl || img.imageUrl)}
+                                            className={`flex-shrink-0 w-16 h-16 md:w-20 md:h-20 overflow-hidden border-2 transition-all rounded shadow-sm relative group ${selectedImage === (img.image1500pxUrl || img.imageUrl)
+                                                ? "border-black shadow-md scale-105"
+                                                : "border-neutral-200 bg-white hover:border-black/50 hover:scale-105"
+                                                }`}
+                                        >
+                                            <div className="absolute inset-0 bg-neutral-50 -z-10 group-hover:bg-neutral-100 transition-colors" />
+                                            <img src={img.thumbnailUrl} alt="" className="w-full h-full object-cover p-1 relative z-10 bg-white" />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
-                    {/* RIGHT Column: Info */}
-                    <div className="mt-10 lg:mt-0">
+                    {/* Content Side */}
+                    <div className="md:w-1/2 w-full flex flex-col items-start p-6 md:p-10 lg:p-12 z-10 bg-white relative">
                         <motion.div
-                            initial={{ opacity: 0, x: 20 }}
+                            initial={{ opacity: 0, x: 30 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-gray-100"
+                            className="flex flex-col items-start text-left w-full"
                         >
-                            <h1 className="text-3xl font-black text-gray-900 mb-2">{product.name}</h1>
-                            <p className="text-pmc-yellow text-2xl font-bold mb-6">
-                                {product.defaultDisplayedPriceFormatted || `${product.price} DT`}
+                            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-black mb-2 leading-tight tracking-tight uppercase font-heading">
+                                {product.name}
+                            </h1>
+
+                            <p className="text-xl md:text-2xl font-black text-pmc-yellow mb-4 tracking-tight">
+                                {getPriceDisplay()}
                             </p>
 
-                            <div className="prose prose-sm text-gray-500 mb-8"
+                            <div className="prose prose-sm text-gray-500 mb-6 leading-relaxed font-light w-full border-b border-neutral-100 pb-6"
                                 dangerouslySetInnerHTML={{ __html: product.description }}
                             />
 
-                            <div className="space-y-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="flex-1 flex flex-col gap-1">
-                                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 ml-1">
-                                            Quantité
+                            <div className="w-full space-y-4 md:space-y-6">
+                                {product.options && product.options.map((opt, idx) => (
+                                    <div key={idx} className="flex flex-col gap-2">
+                                        <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-black">
+                                            {opt.nameTranslated?.fr || opt.name} {opt.required && "*"}
                                         </label>
-                                        <div className="flex items-center border border-neutral-200 rounded-xl overflow-hidden bg-neutral-50 h-[52px]">
-                                            <button
-                                                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                                className="w-12 h-full flex items-center justify-center hover:bg-neutral-100 transition-colors text-pmc-blue"
-                                            >
-                                                -
-                                            </button>
-                                            <input
-                                                type="number"
-                                                value={quantity}
-                                                onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                                                className="w-full text-center bg-transparent border-none text-pmc-blue font-bold focus:ring-0"
-                                            />
-                                            <button
-                                                onClick={() => setQuantity(quantity + 1)}
-                                                className="w-12 h-full flex items-center justify-center hover:bg-neutral-100 transition-colors text-pmc-blue"
-                                            >
-                                                +
-                                            </button>
+                                        <div className="flex flex-wrap gap-2">
+                                            {opt.choices?.map((choice, cIdx) => (
+                                                <button
+                                                    key={cIdx}
+                                                    onClick={() => setSelectedOptions(prev => ({ ...prev, [opt.name]: choice.text }))}
+                                                    className={`px-4 py-2 md:px-5 md:py-2.5 rounded-[4px] text-[13px] md:text-sm font-bold transition-all border-2 ${selectedOptions[opt.name] === choice.text
+                                                        ? "bg-black text-white border-black shadow-md"
+                                                        : "bg-white text-gray-800 border-neutral-200 hover:border-black"
+                                                        }`}
+                                                >
+                                                    {choice.textTranslated?.fr || choice.text}
+                                                    {choice.priceModifier ? ` (+${choice.priceModifier} €)` : ""}
+                                                </button>
+                                            ))}
                                         </div>
+                                    </div>
+                                ))}
+
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-black">
+                                        Quantité
+                                    </label>
+                                    <div className="flex items-center border-2 border-neutral-200 rounded-[4px] overflow-hidden bg-white h-[48px] w-[120px]">
+                                        <button
+                                            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                            className="w-12 h-full flex items-center justify-center hover:bg-neutral-100 transition-colors text-black font-bold text-lg"
+                                        >
+                                            -
+                                        </button>
+                                        <input
+                                            type="number"
+                                            value={quantity}
+                                            onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                                            className="w-full text-center bg-transparent border-none text-black font-black focus:ring-0 text-base"
+                                        />
+                                        <button
+                                            onClick={() => setQuantity(quantity + 1)}
+                                            className="w-12 h-full flex items-center justify-center hover:bg-neutral-100 transition-colors text-black font-bold text-lg"
+                                        >
+                                            +
+                                        </button>
                                     </div>
                                 </div>
 
-                                <button
-                                    onClick={handleAddToCart}
-                                    className="w-full bg-pmc-yellow text-white py-4 rounded-full font-black text-lg shadow-lg shadow-pmc-yellow/30 hover:bg-pmc-yellow/90 transform active:scale-95 transition-all flex items-center justify-center gap-3"
-                                >
-                                    <FaShoppingCart /> AJOUTER AU PANIER
-                                </button>
+                                <div className="flex w-full mt-6 justify-start">
+                                    <button
+                                        onClick={handleAddToCart}
+                                        className="relative flex items-center justify-center w-full max-w-[420px] h-[56px] md:h-[64px]  border-2 border-gray-50/60 group hover:-translate-y-1 transition-all duration-300 cursor-pointer rounded-lg shadow-xl p-1"
+                                    >
+                                        <span
+                                            className="flex items-center justify-center w-full h-full font-bold text-[15px] md:text-[18px] tracking-[0.02em] md:tracking-[0.04em] text-black border-[3px] border-black rounded-[4px] pt-[2px]"
+                                            style={{ fontFamily: "'Inter', Arial, sans-serif" }}
+                                        >
+                                            AJOUTER AU PANIER <FaShoppingCart className="ml-3 w-4 h-4 md:w-5 md:h-5" />
+                                        </span>
+                                    </button>
+                                </div>
 
-                                <div className="flex items-center gap-4 text-sm text-gray-400 font-medium pt-6 border-t border-gray-50">
-                                    <div className="flex items-center gap-2">
-                                        <FaShippingFast className="text-pmc-yellow" />
+                                <div className="flex flex-wrap items-center gap-2 md:gap-4 text-[11px] md:text-xs text-neutral-500 font-medium pt-6 border-t border-neutral-100">
+                                    <div className="flex items-center gap-1.5">
+                                        <FaShippingFast className="text-pmc-yellow w-4 h-4" />
                                         Livraison Rapide
                                     </div>
-                                    <div className="w-1.5 h-1.5 bg-gray-200 rounded-full" />
-                                    <div>Paiement à la livraison</div>
+                                    <div className="hidden md:block w-1 h-1 bg-neutral-300 rounded-full" />
+                                    <div>Qualité Premium</div>
+                                    <div className="hidden md:block w-1 h-1 bg-neutral-300 rounded-full" />
+                                    <div>Paiement Sécurisé</div>
                                 </div>
                             </div>
                         </motion.div>
                     </div>
+
+                    {/* Background decoration */}
+                    <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-gray-200/50 rounded-full blur-3xl pointer-events-none -z-10" />
                 </div>
             </div>
         </main>
