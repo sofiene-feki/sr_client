@@ -109,7 +109,7 @@ export default function Header() {
           }`}
       >
         <div className="max-w-7xl mx-auto px-0 md:px-6 flex items-center justify-between">
-          <div className="relative w-32 md:w-40 h-0 md:h-auto flex items-center">
+          <div className="relative w-22 md:w-40 h-0 md:h-auto flex items-center">
             <div className="absolute top-1/2 -translate-y-1/2 left-0 z-50">
               <Link to="/" className="group">
                 <motion.div
