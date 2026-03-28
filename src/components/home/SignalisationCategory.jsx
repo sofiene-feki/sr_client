@@ -87,22 +87,20 @@ export default function SignalisationCategory() {
 
   const sliderSettings = {
     dots: false,
-    infinite: isMobile ? categories.length > 1 : categories.length > 4,
-    speed: 600,
-    slidesToShow: isMobile ? 1.5 : Math.min(4, Math.max(1, categories.length)),
+    infinite: false,
+    speed: 500,
+    slidesToShow: isMobile ? 1.2 : 4,
     slidesToScroll: 1,
-    autoplay: !isMobile,
-    autoplaySpeed: 4000,
     arrows: !isMobile,
-    nextArrow: !isMobile ? <NextArrow /> : undefined,
-    prevArrow: !isMobile ? <PrevArrow /> : undefined,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
     swipeToSlide: true,
     centerMode: false,
   };
 
   return (
     <section className="py-12 bg-white overflow-hidden">
-      <div className="max-w-[1400px] mx-auto px-2 md:px-4 lg:px-14 relative">
+      <div className="max-w-[1400px] mx-auto px-0 md:px-4 lg:px-14 relative">
         <div className="text-center mb-16 space-y-4">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}

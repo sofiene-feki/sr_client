@@ -44,12 +44,13 @@ export default function Testimonials() {
 
     const sliderSettings = {
         dots: false,
-        infinite: true,
+        infinite: false,
         speed: 500,
-        slidesToShow: 1.5,
+        slidesToShow: 1.2,
         slidesToScroll: 1,
         arrows: false,
-        autoplay: false,
+        swipeToSlide: true,
+        centerMode: false,
     };
 
     return (
@@ -60,7 +61,7 @@ export default function Testimonials() {
                 <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-gray-200/40 rounded-full blur-3xl" />
             </div>
 
-            <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <div className="max-w-7xl mx-auto px-0 md:px-6 relative z-10">
                 <div className="text-center mb-16 space-y-4 flex flex-col items-center">
                     {/* Pill label matching PanneauxRoutiersCTA */}
                     <motion.div
@@ -87,7 +88,7 @@ export default function Testimonials() {
                 </div>
 
                 {isMobile ? (
-                    <div className="testimonial-slider-container -mx-4 relative z-0">
+                    <div className="testimonial-slider-container mx-0 md:mx-4 relative z-0">
                         <Slider {...sliderSettings} className="px-4">
                             {testimonials.map((item, idx) => (
                                 <div key={idx} className="p-2 outline-none">
