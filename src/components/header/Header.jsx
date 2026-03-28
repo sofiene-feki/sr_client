@@ -7,7 +7,7 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
-import logoBlack from "../../assets/srLogo.png";
+import srLogo from "../../assets/srLogo.png";
 import { RiShoppingBasket2Line } from "react-icons/ri";
 import { HiOutlineBars3BottomRight, HiOutlineUser, HiOutlineShieldCheck } from "react-icons/hi2";
 import { CiGlobe } from "react-icons/ci";
@@ -108,8 +108,8 @@ export default function Header() {
           : "top-0 md:top-9 py-0.5 md:py-4 bg-white/90 backdrop-blur-sm border-b border-pmc-blue/5 shadow-xl"
           }`}
       >
-        <div className="max-w-8xl mx-auto px-0 md:px-6 flex items-center justify-between">
-          <div className="relative w-32 md:w-52 h-0 md:h-10 flex items-center">
+        <div className="max-w-7xl mx-auto px-0 md:px-6 flex items-center justify-between">
+          <div className="relative w-32 md:w-40 h-0 md:h-auto flex items-center">
             <div className="absolute top-1/2 -translate-y-1/2 left-0 z-50">
               <Link to="/" className="group">
                 <motion.div
@@ -122,10 +122,9 @@ export default function Header() {
                   }}
                   whileHover={{ scale: isScrolled ? 0.7 : 1.05 }}
                   whileTap={{ scale: 0.98 }}
-                  className="bg-white rounded-md shadow-[0_30px_70px_rgba(0,0,0,0.35)] border border-white/10 px-4 py-4 origin-left flex items-center justify-center"
                 >
                   <img
-                    src={logoBlack}
+                    src={srLogo}
                     alt="PMC Logo"
                     className="h-12 md:h-20 w-auto object-contain"
                   />
@@ -303,9 +302,9 @@ export default function Header() {
               transition={{ type: "spring", damping: 30, stiffness: 250 }}
               className="fixed inset-y-0 right-0 w-full max-w-sm bg-pmc-blue p-10 shadow-[-20px_0_80px_rgba(0,0,0,0.3)] flex flex-col"
             >
-              <div className="flex items-center justify-between mb-16">
-                <div className="bg-white px-4 py-2 rounded-xl">
-                  <img src={logoBlack} className="h-8" alt="Logo" />
+              <div className="flex items-center">
+                <div className="">
+                  <img src={srLogo} className="h-8" alt="Logo" />
                 </div>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
